@@ -7,12 +7,34 @@ public class Player : MonoBehaviour
    // Serialized fields
    [SerializeField] private float moveSpeed = 7;
    [SerializeField] private GameInput gameInput;
+   [SerializeField] private LayerMask counterLayerMask;
 
    // Private fields
    private bool isWalking = false;
+   private Vector3 lastInteractionDirection;
    
    // Unity Methods
+   private void Start() {
+      gameInput.OnInteractAction +=  GameInput_OnInteractEvent;
+   }
+
    private void Update() 
+   {
+      HandleMovement();
+      HandleInteractions();
+   }
+
+   // Private Methods
+   private bool CanPlayerMove(Vector3 moveDirection, float moveDistance)
+   {
+      float playerHeight = 2f;
+      float playerRadius = 0.7f;
+
+      bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirection, moveDistance);
+      return canMove;
+   }
+
+   private void HandleMovement()
    {
       // Get input from GameInput script
       Vector2 inputVector = gameInput.GetMovementVectorNormalised();
@@ -59,14 +81,54 @@ public class Player : MonoBehaviour
       transform.forward = Vector3.Slerp(transform.forward, moveDirection, rotateSpeed * Time.deltaTime); // Slerp to smoothly move between vectors
    }
 
-   // Private Methods
-   private bool CanPlayerMove(Vector3 moveDirection, float moveDistance)
+   private void HandleInteractions()
    {
-      float playerHeight = 2f;
-      float playerRadius = 0.7f;
+      Vector2 inputVector = gameInput.GetMovementVectorNormalised();
 
-      bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirection, moveDistance);
-      return canMove;
+      // Calculate distance and direction for interaction
+      float interactionDistance = 2f;
+      Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+
+      // having lastInteractionDirection because move direction will be 0 if player is not moving, but it can still interact
+      if (moveDirection != Vector3.zero)
+      {
+         lastInteractionDirection = moveDirection;
+      }
+
+      // Check if there is any object where the player is moving. out raycastHit will give the object with which the player can intersect
+      if (Physics.Raycast(transform.position, lastInteractionDirection, out RaycastHit raycastHit, interactionDistance, counterLayerMask)) // using layerMask so that the raycast only hit the object on that layer
+      {
+         // Check if the gameObject has the ClearCount component
+         if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
+         {
+            // clearCounter.Interact();
+         }
+      }
+   }
+
+   private void GameInput_OnInteractEvent(object sender, System.EventArgs eventArgs)
+   {
+      Vector2 inputVector = gameInput.GetMovementVectorNormalised();
+
+      // Calculate distance and direction for interaction
+      float interactionDistance = 2f;
+      Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+
+      // having lastInteractionDirection because move direction will be 0 if player is not moving, but it can still interact
+      if (moveDirection != Vector3.zero)
+      {
+         lastInteractionDirection = moveDirection;
+      }
+
+      // Check if there is any object where the player is moving. out raycastHit will give the object with which the player can intersect
+      if (Physics.Raycast(transform.position, lastInteractionDirection, out RaycastHit raycastHit, interactionDistance, counterLayerMask)) // using layerMask so that the raycast only hit the object on that layer
+      {
+         // Check if the gameObject has the ClearCount component
+         if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
+         {
+            clearCounter.Interact();
+         }
+      }
    }
 
    // Public Methods
