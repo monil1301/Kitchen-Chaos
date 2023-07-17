@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour 
 {
+   // Properties
+   public static Player Instance { get; private set; }
+
    // Serialized fields
    [SerializeField] private float moveSpeed = 7;
    [SerializeField] private GameInput gameInput;
@@ -12,9 +16,25 @@ public class Player : MonoBehaviour
    // Private fields
    private bool isWalking = false;
    private Vector3 lastInteractionDirection;
+   private ClearCounter selectedCounter;
+
+   // Public fields
+   public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+   public class OnSelectedCounterChangedEventArgs: EventArgs {
+      public ClearCounter selectedCounter;
+   }
    
    // Unity Methods
+   private void Awake() {
+      if (Instance != null)
+      {
+         Debug.LogError("There is more than 1 Player instance");
+      }
+      Instance = this;
+   }
+
    private void Start() {
+      // Subscribe to the publisher of OnInteractAction event
       gameInput.OnInteractAction +=  GameInput_OnInteractEvent;
    }
 
@@ -101,34 +121,39 @@ public class Player : MonoBehaviour
          // Check if the gameObject has the ClearCount component
          if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
          {
-            // clearCounter.Interact();
+            if (selectedCounter != clearCounter)
+            {
+               SetSelectedCounter(clearCounter);
+            }
          }
+         else
+         {
+            SetSelectedCounter(null);
+         }
+      }
+      else
+      {
+         SetSelectedCounter(null);
       }
    }
 
+   private void SetSelectedCounter(ClearCounter selectedCounter)
+   {
+      this.selectedCounter = selectedCounter;
+    
+      // Publish the event to update counters
+      OnSelectedCounterChanged?.Invoke(
+         this,
+         new OnSelectedCounterChangedEventArgs {
+            selectedCounter = selectedCounter
+         }
+      );
+   }
+
+   // Subscriber function of Interact event
    private void GameInput_OnInteractEvent(object sender, System.EventArgs eventArgs)
    {
-      Vector2 inputVector = gameInput.GetMovementVectorNormalised();
-
-      // Calculate distance and direction for interaction
-      float interactionDistance = 2f;
-      Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
-
-      // having lastInteractionDirection because move direction will be 0 if player is not moving, but it can still interact
-      if (moveDirection != Vector3.zero)
-      {
-         lastInteractionDirection = moveDirection;
-      }
-
-      // Check if there is any object where the player is moving. out raycastHit will give the object with which the player can intersect
-      if (Physics.Raycast(transform.position, lastInteractionDirection, out RaycastHit raycastHit, interactionDistance, counterLayerMask)) // using layerMask so that the raycast only hit the object on that layer
-      {
-         // Check if the gameObject has the ClearCount component
-         if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
-         {
-            clearCounter.Interact();
-         }
-      }
+      selectedCounter?.Interact();
    }
 
    // Public Methods
