@@ -563,6 +563,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9054301235209012151, guid: bb811d1af4aaf4e7abb9e35881b414e9,
+        type: 3}
+      propertyPath: kitchenObjectSO
+      value: 
+      objectReference: {fileID: 11400000, guid: d5ac47a32f7c0462697141d207668d3c,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb811d1af4aaf4e7abb9e35881b414e9, type: 3}
 --- !u!1 &999542676
