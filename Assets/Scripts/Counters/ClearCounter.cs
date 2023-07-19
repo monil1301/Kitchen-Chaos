@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour
+public class ClearCounter : MonoBehaviour, IKitchenObjectParent
 {
     // Serialized fields
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
@@ -12,17 +12,23 @@ public class ClearCounter : MonoBehaviour
     private KitchenObject kitchenObject;
 
     // Public methods
-    public void Interact()
+    public void Interact(Player player)
     {
         // Check if any object is present on the counter
         if (kitchenObject == null)
         {
             // Create a kitchen object at the top of the counter
             Transform kitechObjectTransform = Instantiate(kitchenObjectSO.prefab, counterTopPoint);
-            kitechObjectTransform.GetComponent<KitchenObject>().SetClearCounter(this);
+            kitechObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(this);
+        }
+        else
+        {
+            // Player picks up the kitchen object
+            kitchenObject.SetKitchenObjectParent(player);
         }
     }
 
+    // Interface methods implementation
     public Transform GetKitchenObjectFollowTransform()
     {
         return counterTopPoint;
