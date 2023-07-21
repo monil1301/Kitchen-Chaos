@@ -17,13 +17,13 @@ public class Player : MonoBehaviour, IKitchenObjectParent
    // Private fields
    private bool isWalking = false;
    private Vector3 lastInteractionDirection;
-   private ClearCounter selectedCounter;
+   private BaseCounter selectedCounter;
    private KitchenObject kitchenObject;
 
    // Public fields
    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
    public class OnSelectedCounterChangedEventArgs: EventArgs {
-      public ClearCounter selectedCounter;
+      public BaseCounter selectedCounter;
    }
    
    // Unity Methods
@@ -121,7 +121,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       if (Physics.Raycast(transform.position, lastInteractionDirection, out RaycastHit raycastHit, interactionDistance, counterLayerMask)) // using layerMask so that the raycast only hit the object on that layer
       {
          // Check if the gameObject has the ClearCount component
-         if (raycastHit.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
+         if (raycastHit.transform.TryGetComponent<BaseCounter>(out BaseCounter clearCounter))
          {
             if (selectedCounter != clearCounter)
             {
@@ -139,7 +139,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       }
    }
 
-   private void SetSelectedCounter(ClearCounter selectedCounter)
+   private void SetSelectedCounter(BaseCounter selectedCounter)
    {
       this.selectedCounter = selectedCounter;
     
