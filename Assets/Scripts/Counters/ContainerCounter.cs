@@ -14,11 +14,15 @@ public class ContainerCounter : BaseCounter
     // Public methods
     public override void Interact(Player player)
     {
-        // Create a kitchen object and give it to the player
-        Transform kitechObjectTransform = Instantiate(kitchenObjectSO.prefab);
-        kitechObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);
-
-        // Publish the event
-        OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+        // Check if player does not have anything and can take object from the container
+        if (!player.HasKitchenObject())
+        {
+            // Publish the event
+            OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+            
+            // Create a kitchen object and give it to the player
+            Transform kitechObjectTransform = Instantiate(kitchenObjectSO.prefab);
+            kitechObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);
+        }
     }
 }
