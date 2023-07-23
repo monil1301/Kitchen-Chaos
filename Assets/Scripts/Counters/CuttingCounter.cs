@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,14 @@ public class CuttingCounter : BaseCounter
 
     // Private fields
     private int cuttingProgress;
+
+    // Public fields
+    public event EventHandler OnCut;
+    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
+    public class OnProgressChangedEventArgs: EventArgs
+    {
+        public float progressNormalised;
+    }
 
     // Private Methods
     private CuttingRecipeSO GetCuttingRecipeSOWithInput(KitchenObjectSO inputKitchenObjectSO)
@@ -58,7 +67,13 @@ public class CuttingCounter : BaseCounter
                 {
                     // Place the kitchen object from player on the counter
                     player.GetKitchenObject().SetKitchenObjectParent(this);
+
+                    // Update cutting progress to 0
                     cuttingProgress = 0;
+                    CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
+                    OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs{
+                        progressNormalised = (float) cuttingProgress / cuttingRecipeSO.cuttingProgressMax
+                    });
                 }
             }
         }
@@ -78,9 +93,15 @@ public class CuttingCounter : BaseCounter
         // Check if the counter has kitchen object and only interact if it can be processed
         if (HasKitchenObject() && HasRecipeForInput(GetKitchenObject().GetKitchenObjectSO()))
         {
-            cuttingProgress++;
-
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
+            OnCut?.Invoke(this, EventArgs.Empty);
+
+            // Update cutting progress
+            cuttingProgress++;
+            OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs{
+                progressNormalised = (float) cuttingProgress / cuttingRecipeSO.cuttingProgressMax
+            });
+
 
             // Check if the cutting is done, then spawn the slices
             if (cuttingProgress >= cuttingRecipeSO.cuttingProgressMax) 
