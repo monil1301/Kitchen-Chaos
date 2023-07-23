@@ -1335,7 +1335,7 @@ PrefabInstance:
     - target: {fileID: 3329913338962901934, guid: b368b59ba715441bfaec39eb07a11a3d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3329913338962901934, guid: b368b59ba715441bfaec39eb07a11a3d,
         type: 3}
@@ -1345,7 +1345,7 @@ PrefabInstance:
     - target: {fileID: 3329913338962901934, guid: b368b59ba715441bfaec39eb07a11a3d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3329913338962901934, guid: b368b59ba715441bfaec39eb07a11a3d,
         type: 3}
@@ -1360,7 +1360,7 @@ PrefabInstance:
     - target: {fileID: 3329913338962901934, guid: b368b59ba715441bfaec39eb07a11a3d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3329913338962901934, guid: b368b59ba715441bfaec39eb07a11a3d,
         type: 3}
@@ -1720,3 +1720,95 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b368b59ba715441bfaec39eb07a11a3d, type: 3}
+--- !u!1001 &2109074363
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468482, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2093479616431468484, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: m_Name
+      value: CuttingCounter
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289120424962381661, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: cuttingRecipeSOArray.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289120424962381661, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: cuttingRecipeSOArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1212184f647f944559400bd31ef60503,
+        type: 2}
+    - target: {fileID: 7289120424962381661, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: cuttingRecipeSOArray.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 622bec0df8f2f4dfdb3e8b68fec92365,
+        type: 2}
+    - target: {fileID: 7289120424962381661, guid: 7f46e1292947b456bbf6c0952f3aa6b6,
+        type: 3}
+      propertyPath: cuttingRecipeSOArray.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 80cfe22f42cd74cc3adff70909b68bcb,
+        type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7f46e1292947b456bbf6c0952f3aa6b6, type: 3}

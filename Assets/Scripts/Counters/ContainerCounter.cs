@@ -21,8 +21,7 @@ public class ContainerCounter : BaseCounter
             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
             
             // Create a kitchen object and give it to the player
-            Transform kitechObjectTransform = Instantiate(kitchenObjectSO.prefab);
-            kitechObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);
+            KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
         }
     }
 }
