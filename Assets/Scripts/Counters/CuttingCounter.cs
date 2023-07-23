@@ -7,16 +7,31 @@ public class CuttingCounter : BaseCounter
     // Serialized fields
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
 
+    // Private fields
+    private int cuttingProgress;
+
     // Private Methods
-    private KitchenObjectSO GetOutputForInput(KitchenObjectSO inputKitchenObjectSO)
+    private CuttingRecipeSO GetCuttingRecipeSOWithInput(KitchenObjectSO inputKitchenObjectSO)
     {
-        // Get processed kitchen object of a kitchen object. Eg: Get tomoto slices from tomato
+        // Get cutting recipe that has the input
         foreach (var cuttingRecipeSO in cuttingRecipeSOArray)
         {
             if (cuttingRecipeSO.input == inputKitchenObjectSO)
             {
-                return cuttingRecipeSO.output;
+                return cuttingRecipeSO;
             }
+        }
+
+        return null;
+    }
+
+    private KitchenObjectSO GetOutputForInput(KitchenObjectSO inputKitchenObjectSO)
+    {
+        // Get processed kitchen object of a kitchen object. Eg: Get tomoto slices from tomato
+        CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(inputKitchenObjectSO);
+        if (cuttingRecipeSO != null)
+        {
+            return cuttingRecipeSO.output;
         }
 
         return null;
@@ -25,15 +40,8 @@ public class CuttingCounter : BaseCounter
     private bool HasRecipeForInput(KitchenObjectSO inputKitchenObjectSO)
     {
         // Check if the kitchen object can be processed ot not. Eg: Tomato to tomoto slices
-        foreach (var cuttingRecipeSO in cuttingRecipeSOArray)
-        {
-            if (cuttingRecipeSO.input == inputKitchenObjectSO)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(inputKitchenObjectSO);
+        return cuttingRecipeSO != null;
     }
 
     // Public methods
@@ -50,6 +58,7 @@ public class CuttingCounter : BaseCounter
                 {
                     // Place the kitchen object from player on the counter
                     player.GetKitchenObject().SetKitchenObjectParent(this);
+                    cuttingProgress = 0;
                 }
             }
         }
@@ -69,12 +78,20 @@ public class CuttingCounter : BaseCounter
         // Check if the counter has kitchen object and only interact if it can be processed
         if (HasKitchenObject() && HasRecipeForInput(GetKitchenObject().GetKitchenObjectSO()))
         {
-            // Get the processed kitchen object for a kitchen object
-            KitchenObjectSO outputKitchenObjectSO = GetOutputForInput(GetKitchenObject().GetKitchenObjectSO());
+            cuttingProgress++;
 
-            // Destory kitchen object and spawn the sliced kitchen object
-            GetKitchenObject().DestroySelf();
-            KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
+            CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
+
+            // Check if the cutting is done, then spawn the slices
+            if (cuttingProgress >= cuttingRecipeSO.cuttingProgressMax) 
+            {
+                // Get the processed kitchen object for a kitchen object
+                KitchenObjectSO outputKitchenObjectSO = GetOutputForInput(GetKitchenObject().GetKitchenObjectSO());
+
+                // Destory kitchen object and spawn the sliced kitchen object
+                GetKitchenObject().DestroySelf();
+                KitchenObject.SpawnKitchenObject(outputKitchenObjectSO, this);
+            }
         }
     }
 }
