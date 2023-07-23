@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : BaseCounter
-{
+public class CuttingCounter : BaseCounter
+{ 
     // Public methods
     public override void Interact(Player player)
     {
@@ -25,6 +25,16 @@ public class ClearCounter : BaseCounter
                 // Player takes the kitchen object from the counter
                 GetKitchenObject().SetKitchenObjectParent(player);
             }
+        }
+    }
+
+    public override void InteractAlternate(Player player)
+    {
+        // Check if the counter has kitchen object or not
+        if (HasKitchenObject())
+        {
+            // Counter has a kitchen object, so destory it and spawn the sliced or cooked kitchen object
+            GetKitchenObject().DestroySelf();
         }
     }
 }
