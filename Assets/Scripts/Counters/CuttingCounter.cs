@@ -22,7 +22,7 @@ public class CuttingCounter : BaseCounter
     // Private Methods
     private CuttingRecipeSO GetCuttingRecipeSOWithInput(KitchenObjectSO inputKitchenObjectSO)
     {
-        // Get cutting recipe that has the input
+        // Get cutting recipe that matches the input
         foreach (var cuttingRecipeSO in cuttingRecipeSOArray)
         {
             if (cuttingRecipeSO.input == inputKitchenObjectSO)
