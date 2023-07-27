@@ -7,17 +7,24 @@ public class ProgressBarUI : MonoBehaviour
 {
     // Serialized fields
     [SerializeField] private Image barImage;
-    [SerializeField] private CuttingCounter cuttingCounter;
+    [SerializeField] private GameObject hasProgressGameObject;
+
+    // Private fields
+    private IHasProgress hasProgress;
 
     // Unity Methods
     private void Start() {
-        cuttingCounter.OnProgressChanged += CuttingCounter_OnProgressChanged;
+        hasProgress = hasProgressGameObject.GetComponent<IHasProgress>();
+        if (hasProgress == null)
+            Debug.LogError("Game Object " + hasProgressGameObject + " does not have a component");
+
+        hasProgress.OnProgressChanged += HasProgress_OnProgressChanged;
         barImage.fillAmount = 0f; // make it empty on start
 
         Hide(); // Hide it initially
     }
 
-    private void CuttingCounter_OnProgressChanged(object sender, CuttingCounter.OnProgressChangedEventArgs eventArgs)
+    private void HasProgress_OnProgressChanged(object sender, IHasProgress.OnProgressChangedEventArgs eventArgs)
     {
         barImage.fillAmount = eventArgs.progressNormalised;
 

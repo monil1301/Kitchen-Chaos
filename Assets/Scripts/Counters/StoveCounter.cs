@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoveCounter : BaseCounter
+public class StoveCounter : BaseCounter, IHasProgress
 {
     // Serialized fields
     [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
@@ -14,6 +14,7 @@ public class StoveCounter : BaseCounter
     private FryingRecipeSO fryingRecipeSO;
 
     // Public fields
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
     public class OnStateChangedEventArgs : EventArgs 
     {
@@ -107,6 +108,10 @@ public class StoveCounter : BaseCounter
     {
         fryingTimer += Time.deltaTime; // Increase frying timer
 
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
+            progressNormalised = (float) fryingTimer / fryingRecipeSO.fryingTimerMax
+        });
+
         // Check if the meat is fried
         if (fryingTimer > fryingRecipeSO.fryingTimerMax) 
         {
@@ -143,6 +148,9 @@ public class StoveCounter : BaseCounter
                     OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{ 
                                 state = currentState 
                             });
+                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
+                        progressNormalised = (float) fryingTimer / fryingRecipeSO.fryingTimerMax
+                    });
                 }
             }
         }
@@ -161,6 +169,9 @@ public class StoveCounter : BaseCounter
                 OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{ 
                             state = currentState 
                         });
+                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
+                    progressNormalised = 0f
+                });
             }
         }
     }
