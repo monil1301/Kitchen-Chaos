@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter, IHasProgress
 { 
     // Serialized fields
     [SerializeField] private CuttingRecipeSO[] cuttingRecipeSOArray;
@@ -13,16 +13,12 @@ public class CuttingCounter : BaseCounter
 
     // Public fields
     public event EventHandler OnCut;
-    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
-    public class OnProgressChangedEventArgs: EventArgs
-    {
-        public float progressNormalised;
-    }
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
     // Private Methods
     private CuttingRecipeSO GetCuttingRecipeSOWithInput(KitchenObjectSO inputKitchenObjectSO)
     {
-        // Get cutting recipe that has the input
+        // Get cutting recipe that matches the input
         foreach (var cuttingRecipeSO in cuttingRecipeSOArray)
         {
             if (cuttingRecipeSO.input == inputKitchenObjectSO)
@@ -71,7 +67,7 @@ public class CuttingCounter : BaseCounter
                     // Update cutting progress to 0
                     cuttingProgress = 0;
                     CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
-                    OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs{
+                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
                         progressNormalised = (float) cuttingProgress / cuttingRecipeSO.cuttingProgressMax
                     });
                 }
@@ -98,7 +94,7 @@ public class CuttingCounter : BaseCounter
 
             // Update cutting progress
             cuttingProgress++;
-            OnProgressChanged?.Invoke(this, new OnProgressChangedEventArgs{
+            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
                 progressNormalised = (float) cuttingProgress / cuttingRecipeSO.cuttingProgressMax
             });
 
