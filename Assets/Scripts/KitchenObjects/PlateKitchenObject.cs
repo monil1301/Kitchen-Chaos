@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,12 @@ public class PlateKitchenObject : KitchenObject
 
     // Private fields
     private List<KitchenObjectSO> kitchenObjectSOList;
+
+    // Public fields
+    public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
+    public class OnIngredientAddedEventArgs : EventArgs {
+        public KitchenObjectSO kitchenObjectSO;
+    }
 
     // Unity Methods
     private void Awake() 
@@ -33,7 +40,13 @@ public class PlateKitchenObject : KitchenObject
         {
             // Add object to plate 
             kitchenObjectSOList.Add(kitchenObjectSO);
+            OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs { kitchenObjectSO = kitchenObjectSO });
             return true;
         }
+    }
+
+    public List<KitchenObjectSO> GetKitchenObjectSOList()
+    {
+        return kitchenObjectSOList;
     }
 }
