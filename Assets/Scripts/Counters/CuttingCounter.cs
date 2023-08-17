@@ -81,6 +81,18 @@ public class CuttingCounter : BaseCounter, IHasProgress
                 // Player takes the kitchen object from the counter
                 GetKitchenObject().SetKitchenObjectParent(player);
             }
+            else
+            {
+                // Check if the player is carrying a plate
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    // Add the item on the counter on to the plate
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf(); // Destory if added to the plate
+                    }
+                }
+            }
         }
     }
 

@@ -173,6 +173,29 @@ public class StoveCounter : BaseCounter, IHasProgress
                     progressNormalised = 0f
                 });
             }
+            else
+            {
+                // Check if the player is carrying a plate
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    // Add the item on the counter on to the plate
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf(); // Destory if added to the plate
+
+                        // Reset the recipe, timer and state
+                        fryingRecipeSO = null;
+                        currentState = State.Idle;
+                        fryingTimer = 0f;
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{ 
+                                    state = currentState 
+                                });
+                        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
+                            progressNormalised = 0f
+                        });
+                    }
+                }
+            }
         }
     }
 }
