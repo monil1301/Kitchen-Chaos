@@ -8,7 +8,7 @@ public class PlateIconsUI : MonoBehaviour
     [SerializeField] private PlateKitchenObject plateKitchenObject;
     [SerializeField] private Transform iconTemplate;
 
-    // Unity methods
+    // Unity Methods
     private void Awake()
     {
         iconTemplate.gameObject.SetActive(false);
@@ -19,7 +19,7 @@ public class PlateIconsUI : MonoBehaviour
         plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
     }
 
-    // Private methods
+    // Private Methods
     private void PlateKitchenObject_OnIngredientAdded(object sender, PlateKitchenObject.OnIngredientAddedEventArgs eventArgs)
     {
         UpdateVisual();

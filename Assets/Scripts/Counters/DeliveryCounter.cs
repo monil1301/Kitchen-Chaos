@@ -13,6 +13,7 @@ public class DeliveryCounter : BaseCounter
             // Delivery can only be done with the plate, so check if the object with player is a plate or not
             if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
             {
+                DeliveryManager.Instance.DeliverRecipe(plateKitchenObject);
                 player.GetKitchenObject().DestroySelf();
             }
         }
