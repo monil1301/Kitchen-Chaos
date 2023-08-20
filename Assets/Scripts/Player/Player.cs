@@ -21,13 +21,16 @@ public class Player : MonoBehaviour, IKitchenObjectParent
    private KitchenObject kitchenObject;
 
    // Public fields
+   public event EventHandler OnPickedSomething;
    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
-   public class OnSelectedCounterChangedEventArgs: EventArgs {
+   public class OnSelectedCounterChangedEventArgs : EventArgs
+   {
       public BaseCounter selectedCounter;
    }
-   
+
    // Unity Methods
-   private void Awake() {
+   private void Awake()
+   {
       if (Instance != null)
       {
          Debug.LogError("There is more than 1 Player instance");
@@ -35,13 +38,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       Instance = this;
    }
 
-   private void Start() {
+   private void Start()
+   {
       // Subscribe to the publisher of OnInteractAction event
-      gameInput.OnInteractAction +=  GameInput_OnInteractEvent;
+      gameInput.OnInteractAction += GameInput_OnInteractEvent;
       gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateEvent;
    }
 
-   private void Update() 
+   private void Update()
    {
       HandleMovement();
       HandleInteractions();
@@ -67,7 +71,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
 
       // Check if player can move the distance in that direction i.e check for collisons
-      bool canPlayerMove = CanPlayerMove(moveDirection, moveDistance); 
+      bool canPlayerMove = CanPlayerMove(moveDirection, moveDistance);
 
       // If player cannot move, check for one direction X or Z 
       if (!canPlayerMove)
@@ -143,11 +147,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent
    private void SetSelectedCounter(BaseCounter selectedCounter)
    {
       this.selectedCounter = selectedCounter;
-    
+
       // Publish the event to update counters
       OnSelectedCounterChanged?.Invoke(
          this,
-         new OnSelectedCounterChangedEventArgs {
+         new OnSelectedCounterChangedEventArgs
+         {
             selectedCounter = selectedCounter
          }
       );
@@ -171,28 +176,33 @@ public class Player : MonoBehaviour, IKitchenObjectParent
    }
 
    // Interface methods implementation
-    public Transform GetKitchenObjectFollowTransform()
-    {
-        return kitchenObjectHoldPoint;
-    }
+   public Transform GetKitchenObjectFollowTransform()
+   {
+      return kitchenObjectHoldPoint;
+   }
 
-     public void SetKitchenObject(KitchenObject kitchenObject)
-    {
-        this.kitchenObject = kitchenObject;
-    }
+   public void SetKitchenObject(KitchenObject kitchenObject)
+   {
+      this.kitchenObject = kitchenObject;
 
-    public KitchenObject GetKitchenObject()
-    {
-        return kitchenObject;
-    }
+      if (kitchenObject != null)
+      {
+         OnPickedSomething?.Invoke(this, OnSelectedCounterChangedEventArgs.Empty);
+      }
+   }
 
-    public void ClearKitchenObject()
-    {
-        kitchenObject = null;
-    }
+   public KitchenObject GetKitchenObject()
+   {
+      return kitchenObject;
+   }
 
-    public bool HasKitchenObject()
-    {
-        return kitchenObject != null;
-    }
+   public void ClearKitchenObject()
+   {
+      kitchenObject = null;
+   }
+
+   public bool HasKitchenObject()
+   {
+      return kitchenObject != null;
+   }
 }

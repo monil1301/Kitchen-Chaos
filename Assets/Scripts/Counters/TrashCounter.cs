@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TrashCounter : BaseCounter
 {
+    // Public fields
+    public static event EventHandler OnAnyObjectTrashed;
+
     // Private methods
     private IEnumerator DestroyKitchenObjectWithAnimation(Transform kitchenObjectTransform, float animationDuration)
     {
@@ -26,17 +30,19 @@ public class TrashCounter : BaseCounter
         GetKitchenObject().DestroySelf();
     }
 
-   // Public methods
+    // Public methods
     public override void Interact(Player player)
     {
         // Check if the player has kitchen object or not
         if (player.HasKitchenObject())
-        {   
+        {
             // Place the kitchen object from player on the counter
             player.GetKitchenObject().SetKitchenObjectParent(this);
 
             // Destroy the kitchen object with animation so it looks like put in a trash
             StartCoroutine(DestroyKitchenObjectWithAnimation(GetKitchenObject().transform, 0.2f));
+
+            OnAnyObjectTrashed?.Invoke(this, EventArgs.Empty);
         }
     }
 }
