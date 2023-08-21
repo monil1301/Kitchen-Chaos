@@ -18,6 +18,8 @@ public class DeliveryManager : MonoBehaviour
     public static DeliveryManager Instance { get; private set; }
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeDelivered;
+    public event EventHandler OnRecipeSuccess;
+    public event EventHandler OnRecipeFailure;
 
     // Unity Methods
     private void Awake() 
@@ -86,12 +88,14 @@ public class DeliveryManager : MonoBehaviour
                     Debug. Log("Player delivered the correct recipe!");
                     waitingRecipeSOList.RemoveAt(i); // Remove from the waiting list as the recipe is delivered
                     OnRecipeDelivered?.Invoke(this, EventArgs.Empty); 
+                    OnRecipeSuccess?.Invoke(this, EventArgs.Empty); 
                     return;
                 }
             }
         }
 
         // Player delivered wrong recipe. No match found 
+        OnRecipeFailure?.Invoke(this, EventArgs.Empty);
     }
 
     public List<RecipeSO> GetWaitingRecipeSOList() {

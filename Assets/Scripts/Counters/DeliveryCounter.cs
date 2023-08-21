@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class DeliveryCounter : BaseCounter
 {
-    // Public methods
+    // Public fields
+    public static DeliveryCounter Instance { get; private set; }
+
+    // Unity Method
+    private void Awake() 
+    {
+        Instance = this;        
+    }
+
+    // Public Methods
     public override void Interact(Player player)
     {
         // Check if the player has an kitchen object to deliver
