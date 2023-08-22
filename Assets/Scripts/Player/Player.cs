@@ -161,11 +161,15 @@ public class Player : MonoBehaviour, IKitchenObjectParent
    // Subscriber function of Interact event
    private void GameInput_OnInteractEvent(object sender, System.EventArgs eventArgs)
    {
+      if (GameManager.Instance.IsGamePlaying() == false) return;
+
       selectedCounter?.Interact(this);
    }
 
    private void GameInput_OnInteractAlternateEvent(object sender, System.EventArgs eventArgs)
    {
+      if (GameManager.Instance.IsGamePlaying() == false) return;
+         
       selectedCounter?.InteractAlternate(this);
    }
 
