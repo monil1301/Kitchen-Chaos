@@ -13,6 +13,7 @@ public class DeliveryManager : MonoBehaviour
     private float spawnRecipeTimer = 0;
     private float spawnRecipeTimerMax = 4f;
     private int waitingRecipeCountMax = 4;
+    private int successfulRecipesDeliveredCount = 0;
 
     // Public fields
     public static DeliveryManager Instance { get; private set; }
@@ -85,7 +86,7 @@ public class DeliveryManager : MonoBehaviour
                 
                 // Player delivered the correct recipe! 
                 if (plateContentsMatchesRecipe) {
-                    Debug. Log("Player delivered the correct recipe!");
+                    successfulRecipesDeliveredCount++;
                     waitingRecipeSOList.RemoveAt(i); // Remove from the waiting list as the recipe is delivered
                     OnRecipeDelivered?.Invoke(this, EventArgs.Empty); 
                     OnRecipeSuccess?.Invoke(this, EventArgs.Empty); 
@@ -100,5 +101,10 @@ public class DeliveryManager : MonoBehaviour
 
     public List<RecipeSO> GetWaitingRecipeSOList() {
         return waitingRecipeSOList;
+    }
+
+    public int GetSuccessfulRecipesDeliveredCount()
+    {
+        return successfulRecipesDeliveredCount;
     }
 }

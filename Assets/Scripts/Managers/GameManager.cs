@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private State state;
     private float waitingToStartTimer = 1f;
     private float countdownToStartTimer = 3f;
-    private float gamePlayingTimer = 10f;
+    private float gamePlayingTimer = 30f;
 
     // Public fields
     public static GameManager Instance { get; private set; }
@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour
     public bool IsGamePlaying()
     {
         return state == State.GamePlaying;
+    }
+
+    public bool IsGameOver()
+    {
+        return state == State.GameOver;
     }
 
     public bool IsCountdownToStartActive()
