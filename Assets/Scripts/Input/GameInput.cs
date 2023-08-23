@@ -28,6 +28,17 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Pause.performed +=  Pause_performed;
     }
 
+    private void OnDestroy() 
+    {
+        // Unsubcribe to the events to avoid issues on next game start
+        playerInputActions.Player.Interact.performed -=  Interact_performed;
+        playerInputActions.Player.InteractAlternate.performed -=  InteractAlternate_performed;
+        playerInputActions.Player.Pause.performed -=  Pause_performed;
+
+        // Destroy the player input action
+        playerInputActions.Dispose();
+    }
+
     // Private methods
     private void Interact_performed(CallbackContext obj)
     {
