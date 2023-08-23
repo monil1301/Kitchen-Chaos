@@ -16,10 +16,13 @@ public class GameManager : MonoBehaviour
     private float countdownToStartTimer = 3f;
     private float gamePlayingTimer;
     private float gamePlayingTimerMax = 30f;
+    private bool isGamePaused = false;
 
     // Public fields
     public static GameManager Instance { get; private set; }
     public event EventHandler OnStateChanged;
+    public event EventHandler OnGamePaused;
+    public event EventHandler OnGameUnpaused;
 
     // Unity Methods
     private void Awake()
@@ -28,11 +31,17 @@ public class GameManager : MonoBehaviour
         state = State.WaitingToStart;
     }
 
+    private void Start()
+    {
+        GameInput.Instance.OnPauseAction += GameInput_OnPauseAction;
+    }
+
     private void Update()
     {
         switch (state)
         {
             case State.WaitingToStart:
+                // Waiting to start the game
                 waitingToStartTimer -= Time.deltaTime;
                 if (waitingToStartTimer < 0f)
                 {
@@ -41,6 +50,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case State.CountdownToStart:
+                // This will show the countdown timer before starting the game
                 countdownToStartTimer -= Time.deltaTime;
                 if (countdownToStartTimer < 0f)
                 {
@@ -50,6 +60,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case State.GamePlaying:
+                // Handle the game playing timer here
                 gamePlayingTimer -= Time.deltaTime;
                 if (gamePlayingTimer < 0f)
                 {
@@ -61,6 +72,12 @@ public class GameManager : MonoBehaviour
                 OnStateChanged?.Invoke(this, System.EventArgs.Empty);
                 break;
         }
+    }
+
+    // Private Methods
+    private void GameInput_OnPauseAction(object sender, System.EventArgs e)
+    {
+        ToggleGamePause();
     }
 
     // Public Methods
@@ -86,6 +103,23 @@ public class GameManager : MonoBehaviour
 
     public float GetGamePlayingTimerNormalised()
     {
-        return gamePlayingTimer / gamePlayingTimerMax;
+        return gamePlayingTimer / gamePlayingTimerMax; // calculate the time remaining for game play
+    }
+
+    public void ToggleGamePause()
+    {
+        isGamePaused = !isGamePaused;
+        if (isGamePaused)
+        {
+            // It is used to make time.deltaTime stop. And we are using time.deltaTime everywhere, so this will pause everything
+            Time.timeScale = 0f;
+            OnGamePaused?.Invoke(this, System.EventArgs.Empty);
+        }
+        else
+        {
+            // Make time.deltaTime work and that will resume everything in the game
+            Time.timeScale = 1f;
+            OnGameUnpaused?.Invoke(this, System.EventArgs.Empty);
+        }
     }
 }
