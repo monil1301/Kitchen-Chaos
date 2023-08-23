@@ -23,5 +23,8 @@ public class MainMenuUI : MonoBehaviour
                 Application.Quit();
             }
         );
+
+        // To start the time after coming to main menu from the pause menu as we pause everything using time
+        Time.timeScale = 1f;
     }
 }
