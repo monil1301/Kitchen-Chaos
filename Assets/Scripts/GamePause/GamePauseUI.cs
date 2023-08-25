@@ -7,15 +7,28 @@ public class GamePauseUI : MonoBehaviour
 {
     // Serialized fields
     [SerializeField] private Button resumeButton;
+    [SerializeField] private Button optionsButton;
     [SerializeField] private Button mainMenuButton;
+
+    // Public fields
+    public static GamePauseUI Instance;
 
     // Unity Methods
     private void Awake()
     {
+        Instance = this;
         resumeButton.onClick.AddListener(
             () =>
             {
                 GameManager.Instance.ToggleGamePause();
+            }
+        );
+
+        optionsButton.onClick.AddListener(
+            () =>
+            {
+                GameOptionsUI.Instance.Show();
+                Hide();
             }
         );
 
@@ -46,13 +59,14 @@ public class GamePauseUI : MonoBehaviour
         Hide();
     }
 
-    private void Show()
-    {
-        gameObject.SetActive(true);
-    }
-
     private void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    // Public Methods
+    public void Show()
+    {
+        gameObject.SetActive(true);
     }
 }

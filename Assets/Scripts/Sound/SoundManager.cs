@@ -8,6 +8,9 @@ public class SoundManager : MonoBehaviour
     // Serialized fields
     [SerializeField] private AudioClipRefsSO audioClipRefsSO;
 
+    // Private fields
+    private float volume;
+
     // Public fields
     public static SoundManager Instance { get; private set; }
 
@@ -15,6 +18,9 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        // Get save sound effects volume and use it in the game
+        volume = PlayerPrefs.GetFloat(Constants.PlayerPrefsKeys.SOUND_EFFECTS_VOLUME, 1f);
     }
 
     private void Start()
@@ -30,14 +36,14 @@ public class SoundManager : MonoBehaviour
     }
 
     // Private Methods
-    private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
+    private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volumeMultiplier = 1f)
     {
-        PlaySound(audioClipArray[UnityEngine.Random.Range(0, audioClipArray.Length)], position, volume);
+        PlaySound(audioClipArray[UnityEngine.Random.Range(0, audioClipArray.Length)], position, volumeMultiplier);
     }
 
-    private void PlaySound(AudioClip audioClip, Vector3 position, float volume = 1f)
+    private void PlaySound(AudioClip audioClip, Vector3 position, float volumeMultiplier = 1f)
     {
-        AudioSource.PlayClipAtPoint(audioClip, position, volume);
+        AudioSource.PlayClipAtPoint(audioClip, position, volume * volumeMultiplier);
     }
 
     private void DeliveryManager_OnRecipeSuccess(object sender, EventArgs eventArgs)
@@ -79,5 +85,24 @@ public class SoundManager : MonoBehaviour
     public void PlayFootstepsSound(Vector3 position, float volume)
     {
         PlaySound(audioClipRefsSO.footstep, position, volume);
+    }
+
+    public void ChangeVolume()
+    {
+        // Increase volume by 10%
+        volume += .1f;
+
+        // As we are only increasing the volume, after full volume we start from beginning again
+        if (volume > 1f)
+            volume = 0f;
+
+        // Save the sound effects volume
+        PlayerPrefs.SetFloat(Constants.PlayerPrefsKeys.SOUND_EFFECTS_VOLUME, volume);
+        PlayerPrefs.Save();
+    }
+
+    public float GetVolume()
+    {
+        return volume;
     }
 }
