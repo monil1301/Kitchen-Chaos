@@ -10,16 +10,21 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Button quitButton;
 
     // Unity Methods
-    private void Awake() 
+    private void Awake()
     {
+        // Show selected and then you can use gamepad to navigate buttons
+        playButton.Select();
+
         playButton.onClick.AddListener(
-            () => {
+            () =>
+            {
                 Loader.Load(Scene.GameScene);
             }
         );
 
         quitButton.onClick.AddListener(
-            () => {
+            () =>
+            {
                 Application.Quit();
             }
         );

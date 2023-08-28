@@ -32,6 +32,16 @@ public class GameOptionsUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactAltText;
     [SerializeField] private TextMeshProUGUI pauseText;
 
+    [Header("Gamepad Buttons")]
+    [SerializeField] private Button gamepadInteractButton;
+    [SerializeField] private Button gamepadInteractAltButton;
+    [SerializeField] private Button gamepadPauseButton;
+
+    [Header("Gamepad Texts")]
+    [SerializeField] private TextMeshProUGUI gamepadInteractText;
+    [SerializeField] private TextMeshProUGUI gamepadInteractAltText;
+    [SerializeField] private TextMeshProUGUI gamepadPauseText;
+
     // Public fields
     public static GameOptionsUI Instance;
 
@@ -69,6 +79,7 @@ public class GameOptionsUI : MonoBehaviour
 
     private void Start()
     {
+        GameManager.Instance.OnGameUnpaused += GameManager_OnGameUnpaused;
         UpdateVisual();
 
         Hide();
@@ -76,6 +87,11 @@ public class GameOptionsUI : MonoBehaviour
     }
 
     // Private Methods
+    private void GameManager_OnGameUnpaused(object sender, System.EventArgs e)
+    {
+        Hide();
+    }
+
     private void UpdateVisual()
     {
         soundText.text = "Sound Effects: " + Mathf.Round(SoundManager.Instance.GetVolume() * 10f);
@@ -89,6 +105,11 @@ public class GameOptionsUI : MonoBehaviour
         interactText.text = GameInput.Instance.GetKeyBinding(KeyBinding.Interact);
         interactAltText.text = GameInput.Instance.GetKeyBinding(KeyBinding.InteractAlternate);
         pauseText.text = GameInput.Instance.GetKeyBinding(KeyBinding.Pause);
+
+        // Show binding of the gamepad keys
+        gamepadInteractText.text = GameInput.Instance.GetKeyBinding(KeyBinding.Gamepad_Interact);
+        gamepadInteractAltText.text = GameInput.Instance.GetKeyBinding(KeyBinding.Gamepad_InteractAlternate);
+        gamepadPauseText.text = GameInput.Instance.GetKeyBinding(KeyBinding.Gamepad_Pause);
     }
 
     private void AddKeyBindingButtonClickListeners()
@@ -100,6 +121,10 @@ public class GameOptionsUI : MonoBehaviour
         interactButton.onClick.AddListener(() => { RebindKey(KeyBinding.Interact); });
         interactAltButton.onClick.AddListener(() => { RebindKey(KeyBinding.InteractAlternate); });
         pauseButton.onClick.AddListener(() => { RebindKey(KeyBinding.Pause); });
+
+        gamepadInteractButton.onClick.AddListener(() => { RebindKey(KeyBinding.Gamepad_Interact); });
+        gamepadInteractAltButton.onClick.AddListener(() => { RebindKey(KeyBinding.Gamepad_InteractAlternate); });
+        gamepadPauseButton.onClick.AddListener(() => { RebindKey(KeyBinding.Gamepad_Pause); });
     }
 
     private void RebindKey(KeyBinding keyBinding)
@@ -131,5 +156,8 @@ public class GameOptionsUI : MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
+
+        // Show selected and then you can use gamepad to navigate buttons
+        soundButton.Select();
     }
 }
