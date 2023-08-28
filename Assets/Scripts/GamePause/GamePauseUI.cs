@@ -68,5 +68,8 @@ public class GamePauseUI : MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
+
+        // Show selected and then you can use gamepad to navigate buttons
+        resumeButton.Select();
     }
 }

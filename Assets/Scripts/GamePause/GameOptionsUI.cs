@@ -79,6 +79,7 @@ public class GameOptionsUI : MonoBehaviour
 
     private void Start()
     {
+        GameManager.Instance.OnGameUnpaused += GameManager_OnGameUnpaused;
         UpdateVisual();
 
         Hide();
@@ -86,6 +87,11 @@ public class GameOptionsUI : MonoBehaviour
     }
 
     // Private Methods
+    private void GameManager_OnGameUnpaused(object sender, System.EventArgs e)
+    {
+        Hide();
+    }
+
     private void UpdateVisual()
     {
         soundText.text = "Sound Effects: " + Mathf.Round(SoundManager.Instance.GetVolume() * 10f);
@@ -150,5 +156,8 @@ public class GameOptionsUI : MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
+
+        // Show selected and then you can use gamepad to navigate buttons
+        soundButton.Select();
     }
 }
