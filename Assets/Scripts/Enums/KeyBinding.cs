@@ -6,5 +6,8 @@ public enum KeyBinding
     MoveRight,
     Interact,
     InteractAlternate,
-    Pause
+    Pause,
+    Gamepad_Interact,
+    Gamepad_InteractAlternate,
+    Gamepad_Pause
 }

@@ -95,6 +95,13 @@ public class GameInput : MonoBehaviour
                 return playerInputActions.Player.InteractAlternate.bindings[0].ToDisplayString();
             case KeyBinding.Pause:
                 return playerInputActions.Player.Pause.bindings[0].ToDisplayString();
+            // For other inputs gamepad is second so index 1 is used for all gamepad inputs
+            case KeyBinding.Gamepad_Interact:
+                return playerInputActions.Player.Interact.bindings[1].ToDisplayString();
+            case KeyBinding.Gamepad_InteractAlternate:
+                return playerInputActions.Player.InteractAlternate.bindings[1].ToDisplayString();
+            case KeyBinding.Gamepad_Pause:
+                return playerInputActions.Player.Pause.bindings[1].ToDisplayString();
         }
     }
 
@@ -137,6 +144,18 @@ public class GameInput : MonoBehaviour
             case KeyBinding.Pause:
                 inputAction = playerInputActions.Player.Pause;
                 bindingIndex = 0;
+                break;
+            case KeyBinding.Gamepad_Interact:
+                inputAction = playerInputActions.Player.Interact;
+                bindingIndex = 1;
+                break;
+            case KeyBinding.Gamepad_InteractAlternate:
+                inputAction = playerInputActions.Player.InteractAlternate;
+                bindingIndex = 1;
+                break;
+            case KeyBinding.Gamepad_Pause:
+                inputAction = playerInputActions.Player.Pause;
+                bindingIndex = 1;
                 break;
         }
 

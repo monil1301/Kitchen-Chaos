@@ -78,7 +78,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       {
          // Check for X movement
          Vector3 moveDirectionX = new Vector3(moveDirection.x, 0, 0).normalized;
-         canPlayerMove = moveDirection.x != 0 && CanPlayerMove(moveDirectionX, moveDistance);
+         canPlayerMove = (moveDirection.x < -0.5f || moveDirection.x > 0.5f) && CanPlayerMove(moveDirectionX, moveDistance);
          if (canPlayerMove)
          {
             moveDirection = moveDirectionX;
@@ -87,7 +87,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
          {
             //Check for Z movement
             Vector3 moveDirectionZ = new Vector3(0, 0, moveDirection.y).normalized;
-            canPlayerMove = moveDirection.z != 0 && CanPlayerMove(moveDirectionZ, moveDistance);
+            canPlayerMove = (moveDirection.z < -0.5f || moveDirection.z > 0.5f) && CanPlayerMove(moveDirectionZ, moveDistance);
             if (canPlayerMove)
             {
                moveDirection = moveDirectionZ;
@@ -169,7 +169,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
    private void GameInput_OnInteractAlternateEvent(object sender, System.EventArgs eventArgs)
    {
       if (GameManager.Instance.IsGamePlaying() == false) return;
-         
+
       selectedCounter?.InteractAlternate(this);
    }
 
