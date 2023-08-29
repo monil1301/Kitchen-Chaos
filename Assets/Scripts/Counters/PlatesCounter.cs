@@ -21,7 +21,7 @@ public class PlatesCounter : BaseCounter
     public event EventHandler OnPlateRemoved;
 
     // Unity Methods
-    private void Update() 
+    private void Update()
     {
         // Timer to spawn plate after a fixed interval
         spawnPlateTimer += Time.deltaTime;
@@ -31,8 +31,8 @@ public class PlatesCounter : BaseCounter
         {
             spawnPlateTimer = 0f; // reset timer
 
-            // Only spawn the plate if it is less then a fixed count
-            if (platesSpawnedCount < PLATES_SPAWNED_COUNT_MAX)
+            // Only spawn the plate if it is less then a fixed count and the game is in the playing state
+            if (GameManager.Instance.IsGamePlaying() && platesSpawnedCount < PLATES_SPAWNED_COUNT_MAX)
             {
                 platesSpawnedCount++;
                 OnPlateSpawned?.Invoke(this, EventArgs.Empty); // Event to generate a dummy visual for the plate
