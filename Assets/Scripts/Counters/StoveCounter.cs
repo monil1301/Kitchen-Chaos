@@ -16,11 +16,11 @@ public class StoveCounter : BaseCounter, IHasProgress
     // Public fields
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
-    public class OnStateChangedEventArgs : EventArgs 
+    public class OnStateChangedEventArgs : EventArgs
     {
         public State state;
     }
-    public enum State 
+    public enum State
     {
         Idle,
         Frying,
@@ -34,9 +34,9 @@ public class StoveCounter : BaseCounter, IHasProgress
         currentState = State.Idle;
     }
 
-    private void Update() 
+    private void Update()
     {
-        if (HasKitchenObject()) 
+        if (HasKitchenObject())
         {
             switch (currentState)
             {
@@ -44,22 +44,32 @@ public class StoveCounter : BaseCounter, IHasProgress
                     break;
                 case State.Frying:
                     HandleFrying(
-                        () => {  
+                        () =>
+                        {
                             // Update state
                             currentState = State.Fried;
-                            OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{ 
-                                state = currentState 
+                            OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
+                            {
+                                state = currentState
                             });
                         }
                     );
                     break;
                 case State.Fried:
                     HandleFrying(
-                        () => {  
+                        () =>
+                        {
                             // Update state
-                            currentState = State.Burned; 
-                            OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{ 
-                                state = currentState 
+                            currentState = State.Burned;
+                            OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
+                            {
+                                state = currentState
+                            });
+
+                            // To hide the progress bar once it is burnt.
+                            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+                            {
+                                progressNormalised = 0f
                             });
                         }
                     );
@@ -108,12 +118,13 @@ public class StoveCounter : BaseCounter, IHasProgress
     {
         fryingTimer += Time.deltaTime; // Increase frying timer
 
-        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
-            progressNormalised = (float) fryingTimer / fryingRecipeSO.fryingTimerMax
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+        {
+            progressNormalised = (float)fryingTimer / fryingRecipeSO.fryingTimerMax
         });
 
         // Check if the meat is fried
-        if (fryingTimer > fryingRecipeSO.fryingTimerMax) 
+        if (fryingTimer > fryingRecipeSO.fryingTimerMax)
         {
             // Destroy uncooked meat and spawn the cooked meat
             GetKitchenObject().DestroySelf();
@@ -145,11 +156,13 @@ public class StoveCounter : BaseCounter, IHasProgress
                     fryingRecipeSO = GetFryingRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
                     currentState = State.Frying;
                     fryingTimer = 0f;
-                    OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{ 
-                                state = currentState 
-                            });
-                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
-                        progressNormalised = (float) fryingTimer / fryingRecipeSO.fryingTimerMax
+                    OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
+                    {
+                        state = currentState
+                    });
+                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+                    {
+                        progressNormalised = (float)fryingTimer / fryingRecipeSO.fryingTimerMax
                     });
                 }
             }
@@ -166,10 +179,12 @@ public class StoveCounter : BaseCounter, IHasProgress
                 fryingRecipeSO = null;
                 currentState = State.Idle;
                 fryingTimer = 0f;
-                OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{ 
-                            state = currentState 
-                        });
-                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
+                OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
+                {
+                    state = currentState
+                });
+                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+                {
                     progressNormalised = 0f
                 });
             }
@@ -187,15 +202,22 @@ public class StoveCounter : BaseCounter, IHasProgress
                         fryingRecipeSO = null;
                         currentState = State.Idle;
                         fryingTimer = 0f;
-                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs{ 
-                                    state = currentState 
-                                });
-                        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs{
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
+                        {
+                            state = currentState
+                        });
+                        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
+                        {
                             progressNormalised = 0f
                         });
                     }
                 }
             }
         }
+    }
+
+    public bool IsFried()
+    {
+        return currentState == State.Fried;
     }
 }

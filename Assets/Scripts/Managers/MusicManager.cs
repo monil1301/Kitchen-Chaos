@@ -17,6 +17,7 @@ public class MusicManager : MonoBehaviour
 
         // Get save music volume and use it in the game
         volume = PlayerPrefs.GetFloat(Constants.PlayerPrefsKeys.MUSIC_VOLUME, 0.3f);
+        audioSource.volume = volume;
     }
 
     // Public Methods
