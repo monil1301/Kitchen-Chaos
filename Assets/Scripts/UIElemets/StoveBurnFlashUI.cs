@@ -19,7 +19,6 @@ public class StoveBurnFlashUI : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    // Unity Methods
     private void Start()
     {
         stoveCounter.OnProgressChanged += StoveCounter_OnProgressChanged;
