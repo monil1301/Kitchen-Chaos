@@ -708,6 +708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 198efed34d893433fb76b80d51ea1145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldResetOnAwake: 1
 --- !u!4 &744731742
 Transform:
   m_ObjectHideFlags: 0

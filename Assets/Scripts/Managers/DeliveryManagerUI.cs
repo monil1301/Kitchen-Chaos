@@ -10,31 +10,32 @@ public class DeliveryManagerUI : MonoBehaviour
     [SerializeField] private Transform recipeTemplate;
 
     // Unity Methods
-    private void Awake() 
+    private void Awake()
     {
         recipeTemplate.gameObject.SetActive(false);
     }
 
-    private void Start() 
+    private void Start()
     {
         DeliveryManager.Instance.OnRecipeSpawned += DeliveryManager_OnRecipeSpawned;
         DeliveryManager.Instance.OnRecipeDelivered += DeliveryManager_OnRecipeDelivered;
     }
 
     // Private Methods
-    private void UpdateVisual () {
+    private void UpdateVisual()
+    {
         // Destroy the list
-        foreach (Transform child in container) 
+        foreach (Transform child in container)
         {
             // Do not destroy the template used to create other visuals
-            if (child == recipeTemplate) continue; 
-            Destroy (child.gameObject);
+            if (child == recipeTemplate) continue;
+            Destroy(child.gameObject);
         }
 
         // Create recipes from the template
-        foreach (RecipeSO recipeSO in DeliveryManager. Instance.GetWaitingRecipeSOList ()) 
+        foreach (RecipeSO recipeSO in DeliveryManager.Instance.GetWaitingRecipeSOList())
         {
-            Transform recipeTransform = Instantiate (recipeTemplate, container);
+            Transform recipeTransform = Instantiate(recipeTemplate, container);
             recipeTransform.gameObject.SetActive(true);
             recipeTransform.GetComponent<RecipeTemplateUI>().SetRecipeSO(recipeSO);
         }
@@ -44,9 +45,9 @@ public class DeliveryManagerUI : MonoBehaviour
     {
         UpdateVisual();
     }
-    
+
     private void DeliveryManager_OnRecipeDelivered(object sender, EventArgs eventArgs)
     {
         UpdateVisual();
-    }   
+    }
 }
