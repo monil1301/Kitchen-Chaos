@@ -12,6 +12,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnInteractAction;
     public event EventHandler OnInteractAlternateAction;
     public event EventHandler OnPauseAction;
+    public event EventHandler OnRebindKey;
 
     // Private fields
     private PlayerInputActions playerInputActions;
@@ -173,6 +174,8 @@ public class GameInput : MonoBehaviour
                 // Save the binding of the key
                 PlayerPrefs.SetString(Constants.PlayerPrefsKeys.PLAYER_KEY_BINDING, playerInputActions.SaveBindingOverridesAsJson());
                 PlayerPrefs.Save();
+
+                OnRebindKey?.Invoke(this, EventArgs.Empty);
             })
             .Start(); // Starts the rebinding process
     }

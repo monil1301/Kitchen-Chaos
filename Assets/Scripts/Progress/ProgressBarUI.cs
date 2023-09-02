@@ -13,7 +13,8 @@ public class ProgressBarUI : MonoBehaviour
     private IHasProgress hasProgress;
 
     // Unity Methods
-    private void Start() {
+    private void Start()
+    {
         hasProgress = hasProgressGameObject.GetComponent<IHasProgress>();
         if (hasProgress == null)
             Debug.LogError("Game Object " + hasProgressGameObject + " does not have a component");
@@ -28,7 +29,7 @@ public class ProgressBarUI : MonoBehaviour
     {
         barImage.fillAmount = eventArgs.progressNormalised;
 
-        if (eventArgs.progressNormalised == 0 || eventArgs.progressNormalised == 1)
+        if (eventArgs.progressNormalised == 0f || eventArgs.progressNormalised == 1f)
         {
             Hide();
         }

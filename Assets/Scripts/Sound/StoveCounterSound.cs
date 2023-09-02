@@ -9,6 +9,8 @@ public class StoveCounterSound : MonoBehaviour
 
     // Private fields
     private AudioSource audioSource;
+    private bool playWarningSound;
+    private float warningSoundTimer;
 
     // Unity Methods
     private void Awake()
@@ -16,9 +18,25 @@ public class StoveCounterSound : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void Start() 
+    private void Start()
     {
         stoveCounter.OnStateChanged += StoveCounter_OnStateChanged;
+        stoveCounter.OnProgressChanged += StoveCounter_OnProgressChanged;
+    }
+
+    private void Update()
+    {
+        if (playWarningSound)
+        {
+            warningSoundTimer -= Time.deltaTime;
+            if (warningSoundTimer <= 0f)
+            {
+                float warningSoundTimerMax = 0.2f; // plays the sound 5 times a second
+                warningSoundTimer = warningSoundTimerMax;
+
+                SoundManager.Instance.PlayWarningSound(stoveCounter.transform.position);
+            }
+        }
     }
 
     // Private Methods
@@ -35,4 +53,13 @@ public class StoveCounterSound : MonoBehaviour
             audioSource.Pause();
         }
     }
+
+    private void StoveCounter_OnProgressChanged(object sender, IHasProgress.OnProgressChangedEventArgs eventArgs)
+    {
+        float burnShowProgressAmount = 0.3f; // Progress after which want to play burning warning sound
+
+        // Check if it is fried and progress is greater than burnShowProgressAmount
+        playWarningSound = stoveCounter.IsFried() && eventArgs.progressNormalised > burnShowProgressAmount;
+    }
+
 }
